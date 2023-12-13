@@ -1,11 +1,16 @@
 document.querySelector("form").addEventListener("submit", (event) => {
     event.preventDefault();
-    const name = document.getElementById("name").value;
-    const item = {
-        id: new Date().toISOString(),
-        name: name.trim(),
-    };
-    addItemToLS(item);
+    const name = document.getElementById("name").value.trim();
+    document.querySelector("form").reset();
+    if (name !== "") {
+        const item = {
+            id: new Date().toISOString(),
+            name: name.trim(),
+        };
+        addItemToLS(item);
+    } else {
+        alert("Tên không thể bỏ trống hoặc chứa toàn khoảng trắng !!!");
+    }
 });
 
 // Add to Localstorage
@@ -14,7 +19,7 @@ const addItemToLS = (item) => {
     card.className =
         "card p-2 flex-row justify-content-between align-items-center mb-3";
     card.innerHTML = `<span>${item.name}</span>
-     <button class='btn btn-sm btn-danger' data-id='${item.id}'>
+     <button class='btn btn-sm btn-danger btn-remove' data-id='${item.id}'>
         Remove
      </button>
     `;
@@ -49,7 +54,7 @@ const removeItemFromLS = (id) => {
 document.querySelector(".list").addEventListener("click", (event) => {
     if (event.target.classList.contains("btn-remove")) {
         const name = event.target.previousElementSibling.textContent;
-        const isConfirmed = confirm("Bạn có muốn xoá ?");
+        const isConfirmed = confirm(`Bạn có muốn xoá item ' ${name} ' ?`);
         if (isConfirmed) {
             const card = event.target.parentElement;
             const id = event.target.dataset.id;
@@ -94,5 +99,4 @@ const init = () => {
         addItemToUI(item);
     });
 };
-
 init();
